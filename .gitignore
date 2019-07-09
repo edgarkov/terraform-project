@@ -1,0 +1,6 @@
+#Compiled files
+*.tfstate
+*.tfstate.beckup
+
+#Module directory
+.terraform/
