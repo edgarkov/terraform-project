@@ -38,14 +38,14 @@ resource "aws_instance" "CI" {
     }
 }
 
-resource "aws_instance" "QA" {
+resource "aws_instance" "Artifactory" {
     ami = "${data.aws_ami.ubuntu.id}"
     instance_type = "t2.micro"
     key_name = "aws-root"
     security_groups = [ "${aws_security_group.subnetsecurity.name}", "${aws_security_group.ssh-group.name}"]
 
     tags = {
-        Name = "QA"
+        Name = "Artifactory"
     }
 }
 
