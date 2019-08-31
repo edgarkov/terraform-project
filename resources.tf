@@ -1,27 +1,52 @@
-# resource "aws_vpc" "environment-example-two" {
-#     cidr_block = "10.0.0.0/16"
-#     enable_dns_hostnames = true
-#     enable_dns_support = true
-#     tags = {
-#         Name = "terraform-aws-vps-example-two"
-#     }
-# }
+resource "aws_vpc" "vpc-tst" {
+    cidr_block = "10.0.0.0/16"
+    enable_dns_hostnames = true
+    enable_dns_support = true
+    tags = {
+        Name = "vpc-tst"
+    }
+}
 
-# resource "aws_subnet" "subnet1" {
-#     cidr_block = "${cidrsubnet(aws_vpc.environment-example-two.cidr_block, 3, 1)}"
-#     vpc_id = "${aws_vpc.environment-example-two.id}"
-#     availability_zone = "us-east-1a"
-# }
+resource "aws_internet_gateway" "gw" {
+    vpc_id = "${aws_vpc.vpc-tst.id}"
 
-# resource "aws_subnet" "subnet2" {
-#     cidr_block = "${cidrsubnet(aws_vpc.environment-example-two.cidr_block, 2, 2)}"
-#     vpc_id = "${aws_vpc.environment-example-two.id}"
-#     availability_zone = "us-east-1b"
-# }
+    tags = {
+        Name = "gw"
+    }
+}
+
+resource "aws_route_table" "r" {
+    vpc_id = "${aws_vpc.vpc-tst.id}"
+
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "${aws_internet_gateway.gw.id}"
+    }
+
+    tags = {
+        Name = "gw"
+    }
+}
+
+resource "aws_subnet" "PublicSubnet" {
+    cidr_block = "10.0.1.0/24"
+    vpc_id = "${aws_vpc.vpc-tst.id}"
+    availability_zone = "us-east-1a"
+    map_public_ip_on_launch = true
+    tags = {
+        Name = "PubSub"
+    }
+}
+
+resource "aws_route_table_association" "a" {
+    subnet_id      = "${aws_subnet.PublicSubnet.id}"
+    route_table_id = "${aws_route_table.r.id}"
+}
+
 
 resource "aws_security_group" "subnetsecurity" {
     # name = "subnetsecurity"
-    # vpc_id = "${aws_vpc.environment-example-two.id}"
+    vpc_id = "${aws_vpc.vpc-tst.id}"
 
     ingress  {
         # cidr_blocks = [
@@ -32,12 +57,19 @@ resource "aws_security_group" "subnetsecurity" {
         to_port = 80
         protocol = "tcp"
     }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
 }
 
 
 resource "aws_security_group" "ssh-group" {
     # name = "subnetsecurity"
-    # vpc_id = "${aws_vpc.environment-example-two.id}"
+    vpc_id = "${aws_vpc.vpc-tst.id}"
 
     ingress  {
         # cidr_blocks = [

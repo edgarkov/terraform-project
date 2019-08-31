@@ -20,7 +20,8 @@ resource "aws_instance" "DevTools" {
     ami = "${data.aws_ami.ubuntu.id}"
     instance_type = "t2.micro"
     key_name = "aws-root"
-    security_groups = [ "${aws_security_group.subnetsecurity.name}", "${aws_security_group.ssh-group.name}"]
+    security_groups = [ "${aws_security_group.subnetsecurity.id}", "${aws_security_group.ssh-group.id}"]
+    subnet_id = "${aws_subnet.PublicSubnet.id}"
 
     tags = {
         Name = "DevTools"
@@ -31,7 +32,8 @@ resource "aws_instance" "CI" {
     ami = "${data.aws_ami.ubuntu.id}"
     instance_type = "t2.micro"
     key_name = "aws-root"
-    security_groups = [ "${aws_security_group.subnetsecurity.name}", "${aws_security_group.ssh-group.name}"]
+    security_groups = [ "${aws_security_group.subnetsecurity.id}", "${aws_security_group.ssh-group.id}"]
+    subnet_id = "${aws_subnet.PublicSubnet.id}"
 
     tags = {
         Name = "CI"
@@ -42,7 +44,8 @@ resource "aws_instance" "Artifactory" {
     ami = "${data.aws_ami.ubuntu.id}"
     instance_type = "t2.micro"
     key_name = "aws-root"
-    security_groups = [ "${aws_security_group.subnetsecurity.name}", "${aws_security_group.ssh-group.name}"]
+    security_groups = [ "${aws_security_group.subnetsecurity.id}", "${aws_security_group.ssh-group.id}"]
+    subnet_id = "${aws_subnet.PublicSubnet.id}"
 
     tags = {
         Name = "Artifactory"
@@ -53,7 +56,8 @@ resource "aws_instance" "Docker" {
     ami = "${data.aws_ami.ubuntu.id}"
     instance_type = "t2.micro"
     key_name = "aws-root"
-    security_groups = [ "${aws_security_group.subnetsecurity.name}", "${aws_security_group.ssh-group.name}"]
+    security_groups = [ "${aws_security_group.subnetsecurity.id}", "${aws_security_group.ssh-group.id}"]
+    subnet_id = "${aws_subnet.PublicSubnet.id}"
 
     tags = {
         Name = "Docker"
