@@ -26,6 +26,12 @@ resource "aws_instance" "DevTools" {
     tags = {
         Name = "DevTools"
     }
+
+    user_data = <<-EOF
+                #!/bin/bash
+                sudo apt update
+                sudo apt install python -y
+                EOF
 }
 
 resource "aws_instance" "CI" {
@@ -38,6 +44,11 @@ resource "aws_instance" "CI" {
     tags = {
         Name = "CI"
     }
+    user_data = <<-EOF
+                #!/bin/bash
+                sudo apt update
+                sudo apt install python -y
+                EOF
 }
 
 resource "aws_instance" "Artifactory" {
@@ -50,6 +61,11 @@ resource "aws_instance" "Artifactory" {
     tags = {
         Name = "Artifactory"
     }
+    user_data = <<-EOF
+                #!/bin/bash
+                sudo apt update
+                sudo apt install python -y
+                EOF
 }
 
 resource "aws_instance" "Docker" {
@@ -62,4 +78,9 @@ resource "aws_instance" "Docker" {
     tags = {
         Name = "Docker"
     }
+    user_data = <<-EOF
+                #!/bin/bash
+                sudo apt update
+                sudo apt install python -y
+                EOF
 }
